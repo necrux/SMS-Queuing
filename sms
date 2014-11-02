@@ -1,0 +1,23 @@
+#!/bin/bash
+
+if [[ $(echo $1|head -c1) == [a-Z] ]]; then
+NUMBER=$(awk 'NF && $1!~/^#/' .sms_creds|grep -A2 "\[$1\]"|grep number|cut -d= -f2)
+CARRIER=$(awk 'NF && $1!~/^#/' .sms_creds|grep -A2 "\[$1\]"|grep '~'|awk -F' ~ ' '{print $2}')
+HOUR=$(echo $2|awk -F: '{print $1}')
+MINUTE=$(echo $2|awk -F: '{print $2}')
+MESSAGE=$3
+else
+NUMBER=$(awk 'NF && $1!~/^#/ && c&&c--;/\[default\]/{c=2}' .sms_creds|grep number|cut -d= -f2)
+CARRIER=$(awk 'NF && $1!~/^#/ && c&&c--;/\[default\]/{c=2}' .sms_creds|grep '~'|awk -F' ~ ' '{print $2}')
+HOUR=$(echo $1|awk -F: '{print $1}')
+MINUTE=$(echo $1|awk -F: '{print $2}')
+MESSAGE=$2
+fi
+
+curl \
+--data "number=$NUMBER" \
+--data "carrier=$CARRIER" \
+--data "hour=$HOUR" \
+--data "minute=$MINUTE" \
+--data "message=$MESSAGE" \
+-skL https://__sms-server__

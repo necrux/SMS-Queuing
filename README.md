@@ -18,5 +18,5 @@ Example time formats:
 
 If no user is specified the default user is used; to specifiy a different user run it as follows:
 
-/path/to/script user1 HH:MM "Buy dog food."
+/path/to/script user1 HH:MM "Buy dog food."<br>
 /path/to/script user2 HH:MM "Buy dog food."
